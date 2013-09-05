@@ -27,7 +27,12 @@ class eucalyptus::walrus (
   }
 
   class eucalyptus::walrus_config inherits eucalyptus::walrus {
-    File <<|title == "${cloud_name}_euca.p12"|>>
+
+    $clc_facts = query_facts("Class[eucalyptus::clc]{cloud_name=${cloud_name}}", ['eucakeys_euca_p12'])
+
+    File <<|title == "${cloud_name}_euca.p12"|>> {
+      content => template("${module_name}/euca.p12.erb"),
+    }
   }
 
   class eucalyptus::walrus_reg inherits eucalyptus::walrus {

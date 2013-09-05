@@ -24,8 +24,20 @@ class eucalyptus::sc (
     }
   }
 
+
   class eucalyptus::sc_config inherits eucalyptus::sc {
-    File <<|title == "${cloud_name}_euca.p12"|>>
+
+    $clc_facts = query_facts("Class[eucalyptus::clc]{cloud_name=${cloud_name}}", ['eucakeys_euca_p12'])
+
+     file { "${cloud_name}_euca.p12":
+        path      => '/var/lib/eucalyptus/keys/euca.p12',
+        content => template("${module_name}/euca.p12.erb"),
+        owner     => 'eucalyptus',
+        group     => 'eucalyptus',
+        mode      => '0700',
+        tag       => "${cloud_name}_euca.p12",
+      }
+
   }
 
   class eucalyptus::sc_reg inherits eucalyptus::sc {

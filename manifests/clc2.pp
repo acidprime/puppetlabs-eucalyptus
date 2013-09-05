@@ -20,9 +20,14 @@ class eucalyptus::clc2 ($cloud_name = "cloud1") {
     }
   }
   class eucalyptus::clc2_config inherits eucalyptus::clc2 {
+
+    $clc_facts = query_facts("Class[eucalyptus::clc]{cloud_name=${cloud_name}}", ['eucakeys_euca_p12'])
+
     File <<|tag == "${cloud_name}_cloud_cert"|>>
     File <<|tag == "${cloud_name}_cloud_pk"|>>
-    File <<|tag == "${cloud_name}_euca.p12"|>>
+    File <<|tag == "${cloud_name}_euca.p12"|>> {
+      content => template("${module_name}/euca.p12.erb"),
+    }
   }
   class eucalyptus::clc2_reg inherits eucalyptus::clc2 {
     @@exec { "reg_clc_${::hostname}":

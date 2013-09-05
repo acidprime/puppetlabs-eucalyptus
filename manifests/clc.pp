@@ -57,8 +57,6 @@ class eucalyptus::clc (
     if $::eucakeys_euca_p12 {
       @@file { "${cloud_name}_euca.p12":
         path      => '/var/lib/eucalyptus/keys/euca.p12',
-        # content => base64('decode', $::eucakeys_euca_p12),
-        source    => 'puppet:///keys/euca.p12',
         owner     => 'eucalyptus',
         group     => 'eucalyptus',
         mode      => '0700',
